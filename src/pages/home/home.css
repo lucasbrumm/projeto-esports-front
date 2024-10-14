@@ -1,0 +1,20 @@
+.tela-inicial {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+
+.icons-cards-home {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+}
+
+.text-cards-home {
+  padding-top: 65px;
+  font-size: 18px;
+  text-align: center;
+}

@@ -1,0 +1,87 @@
+.container-tela-cadastro-back {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 85vh;
+  width: 50vw;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.card-cadastro {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 50vw;
+  text-align: start;
+  border-bottom-left-radius: 10;
+  border-bottom-right-radius: 10;
+}
+
+.container-card {
+  display: flex;
+  height: 50%;
+}
+
+.container-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-inline: 20px;
+  margin-block: 10px;
+}
+
+.form-cadastro {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.half-card-games-functions {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.titles-games-functions {
+  display: flex;
+  justify-content: space-around;
+  height: 10%;
+}
+
+.container-games-function {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.container-space-game-function {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-functions {
+  padding-inline: 20px;
+  padding-block: 10px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.container-button {
+  z-index: 3;
+  display: flex;
+  width: 50vw;
+  align-items: center;
+  justify-content: center;
+}
