@@ -3,7 +3,7 @@ import { IDadosUsuario } from '../interfaces/User'
 import { Provider } from 'react-redux'
 import { store } from '../redux/store'
 import { MemoryRouter } from 'react-router-dom'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 const dadosUserTest: IDadosUsuario = {
   id: 1,
@@ -51,5 +51,6 @@ describe('Login Screen', () => {
         </MemoryRouter>
       </Provider>
     )
+    screen.debug()
   })
 })
