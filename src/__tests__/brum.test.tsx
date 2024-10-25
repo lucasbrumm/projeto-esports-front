@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react'
 import Login from '../pages/login/Login'
 import { IDadosUsuario } from '../interfaces/User'
 import { Provider } from 'react-redux'
 import { store } from '../redux/store'
 import { MemoryRouter } from 'react-router-dom'
+import { render } from '@testing-library/react'
 
 const dadosUserTest: IDadosUsuario = {
   id: 1,
@@ -42,8 +42,8 @@ jest.mock('../services/api/screen', () => ({
   },
 }))
 
-describe('Render Component', () => {
-  test('Renderizar componente corretamente', () => {
+describe('Login Screen', () => {
+  test('Login - Renderizar componente corretamente', () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
@@ -51,6 +51,5 @@ describe('Render Component', () => {
         </MemoryRouter>
       </Provider>
     )
-    screen.debug()
   })
 })
