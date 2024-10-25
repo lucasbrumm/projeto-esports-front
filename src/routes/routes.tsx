@@ -75,14 +75,6 @@ const router = createBrowserRouter(
   )
 )
 
-function Teste() {
-  return (
-    <div>
-      <h1>AQQQ</h1>
-    </div>
-  )
-}
-
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route element={<SideBarJSX />}>

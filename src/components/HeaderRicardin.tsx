@@ -159,6 +159,7 @@ const HeaderRicardin = () => {
                     }}
                   >
                     <img
+                      alt="Imagem do usuário"
                       src={imageUser || userWithoutImage}
                       onError={(
                         e: React.SyntheticEvent<HTMLImageElement, Event>

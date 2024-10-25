@@ -1,22 +1,22 @@
-import { useDispatch } from 'react-redux'
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+// import { useDispatch } from 'react-redux'
+import { Fragment, useEffect, useState } from 'react'
 import BallotIcon from '@mui/icons-material/Ballot'
 import RecentActorsIcon from '@mui/icons-material/RecentActors'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import HistoryIcon from '@mui/icons-material/History'
 import BlockIcon from '@mui/icons-material/Block'
 import Cards from '../../components/Cards'
-import { getnicknameAndImage } from '../../services/api/user'
-import { setImageUser, setNicknameUser } from '../../redux/reducer'
+// import { getnicknameAndImage } from '../../services/api/user'
+// import { setImageUser, setNicknameUser } from '../../redux/reducer'
 import './home.css'
 import { useGetReducer } from '../../hooks/useGetReducer'
 import { IDataCards } from '../../interfaces/InterfaceComponents'
 
 export default function Home() {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const user = useGetReducer('user')
-  const imageUser = useGetReducer('imageUser')
-  const nicknameUser = useGetReducer('nicknameUser')
+  // const imageUser = useGetReducer('imageUser')
+  // const nicknameUser = useGetReducer('nicknameUser')
 
   const [data, setData] = useState<IDataCards[]>([
     {
@@ -25,20 +25,20 @@ export default function Home() {
     },
   ])
 
-  const handleGetUserImageNickname = useCallback(
-    async (userId: number) => {
-      try {
-        const imageAndNickname = await getnicknameAndImage(userId)
-        if (imageAndNickname) {
-          dispatch(setImageUser(imageAndNickname.imageBase64))
-          dispatch(setNicknameUser(imageAndNickname.nickname))
-        }
-      } catch (error) {
-        console.error('Erro ao buscar imagem do usuário', error)
-      }
-    },
-    [dispatch]
-  )
+  // const handleGetUserImageNickname = useCallback(
+  //   async (userId: number) => {
+  //     try {
+  //       const imageAndNickname = await getnicknameAndImage(userId)
+  //       if (imageAndNickname) {
+  //         dispatch(setImageUser(imageAndNickname.imageBase64))
+  //         dispatch(setNicknameUser(imageAndNickname.nickname))
+  //       }
+  //     } catch (error) {
+  //       console.error('Erro ao buscar imagem do usuário', error)
+  //     }
+  //   },
+  //   [dispatch]
+  // )
 
   const AdminHome = () => {
     const dataCards: IDataCards[] = [

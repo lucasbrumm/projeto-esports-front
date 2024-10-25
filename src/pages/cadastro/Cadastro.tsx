@@ -78,6 +78,7 @@ function Cadastro() {
         email: user?.email,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   function verifyDataPromisses(result: any, index: number) {

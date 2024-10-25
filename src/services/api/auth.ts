@@ -1,10 +1,6 @@
 import axios from 'axios'
 import { BASE_URL } from './common'
-import {
-  IDadosUsuario,
-  IToken,
-  IUserLoginPassword,
-} from '../../interfaces/User'
+import { IDadosUsuario, IUserLoginPassword } from '../../interfaces/User'
 
 const auth = axios.create({
   baseURL: BASE_URL + '/api/auth',
