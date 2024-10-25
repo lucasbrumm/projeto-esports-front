@@ -21,11 +21,7 @@ import { defaultColors } from '../../utils/colors'
 import ButtonGroupDefault from '../../components/ButtonGroupDefault'
 import { ITextFieldGroup } from '../../interfaces/InterfaceComponents'
 import { IError } from '../../interfaces/error'
-import {
-  IDadosUsuario,
-  IToken,
-  IUserLoginPassword,
-} from '../../interfaces/User'
+import { IDadosUsuario, IUserLoginPassword } from '../../interfaces/User'
 import { IEmailFirstAcess } from '../../interfaces/api/InterfaceApiResponse'
 
 function Login() {
