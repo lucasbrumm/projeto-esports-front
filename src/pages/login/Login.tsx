@@ -24,6 +24,9 @@ import { IError } from '../../interfaces/error'
 import { IDadosUsuario, IUserLoginPassword } from '../../interfaces/User'
 import { IEmailFirstAcess } from '../../interfaces/api/InterfaceApiResponse'
 
+export const inputsLoginScreenDataTestId = 'inputs-login-screen-test-id'
+export const checkboxLembrarSenhaTestId = 'checkbox-lembrar-senha-test-id'
+
 function Login() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -358,8 +361,9 @@ function Login() {
               style={{ backgroundColor: defaultColors.greyColor }}
             >
               <div className="inputs-login-password">
-                {textFieldGroup?.map((input) => (
+                {textFieldGroup?.map((input, index) => (
                   <TextField
+                    data-testid={inputsLoginScreenDataTestId + '-' + index}
                     key={input.id}
                     label={input.label}
                     style={input.style}
@@ -377,6 +381,7 @@ function Login() {
                   <div
                     className="container-lembrar-senha"
                     onClick={() => setLembrarSenha(!lembrarSenha)}
+                    data-testid={checkboxLembrarSenhaTestId}
                   >
                     {checkBox()}
                     <Typography

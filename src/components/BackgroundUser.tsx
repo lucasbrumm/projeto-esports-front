@@ -1,6 +1,8 @@
 import atentaImage from '../assets/atenta-logo.png'
 import { CSSProperties, ReactNode } from 'react'
 
+export const atentaLogoTestId = 'atenta-logo-test-id'
+
 function BackgroundUser({
   children,
   isAuthenticated,
@@ -20,8 +22,9 @@ function BackgroundUser({
     <div style={containerStyle as CSSProperties}>
       <div style={stylesBackgroundUser.atentaLogo as CSSProperties}>
         <img
+          data-testid={atentaLogoTestId}
           src={atentaImage}
-          alt='Atenta logo'
+          alt="Atenta logo"
           style={stylesBackgroundUser.imageSize}
         />
       </div>

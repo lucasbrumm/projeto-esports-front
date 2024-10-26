@@ -1,13 +1,16 @@
 import atentaImage from '../assets/atenta-logo.png'
 import { ReactNode, CSSProperties } from 'react'
 
+export const atentaLogoTestId = 'atenta-logo-test-id'
+
 function BackgroundDefault({ children }: { children: ReactNode }) {
   return (
     <div style={stylesLogin.container as CSSProperties}>
       <div style={stylesLogin.atentaLogo as CSSProperties}>
         <img
+          data-testid={atentaLogoTestId}
           src={atentaImage}
-          alt='Atenta logo'
+          alt="Atenta logo"
           style={stylesLogin.imageSize}
         />
       </div>

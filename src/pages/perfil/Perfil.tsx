@@ -46,7 +46,6 @@ function Perfil() {
   const [nicknameField, setNicknameField] = useState<string>('')
   const [noImage, setNoImage] = useState<boolean>(false)
   const [modalImage, setModalImage] = useState<boolean>(false)
-  // eslint-disable-next-line no-unused-vars
   const [, setSelectedFile] = useState<File>()
   const [imageFileModal, setImageFileModal] = useState('')
   const [changedImage, setChangedImage] = useState<boolean>(false)

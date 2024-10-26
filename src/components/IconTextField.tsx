@@ -3,6 +3,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { IconButton, InputAdornment, Tooltip } from '@mui/material'
 import { IconTextFieldProps } from '../interfaces/InterfaceComponents'
 
+export const iconTextFieldTestId = 'icon-text-field-test-id'
+
 function IconTextField({
   icon,
   actionClick,
@@ -16,12 +18,16 @@ function IconTextField({
     endAdornment: (
       <InputAdornment position={position}>
         <Tooltip title={tooltipString}>
-          <IconButton edge={position} onClick={actionClick}>
+          <IconButton
+            edge={position}
+            onClick={actionClick}
+            data-testid={iconTextFieldTestId}
+          >
             {isPassword &&
               (showPassword ? (
-                <Visibility color='primary' />
+                <Visibility color="primary" />
               ) : (
-                <VisibilityOff color='primary' />
+                <VisibilityOff color="primary" />
               ))}
             {icon && <FontAwesomeIcon icon={icon}></FontAwesomeIcon>}
           </IconButton>
