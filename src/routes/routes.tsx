@@ -69,46 +69,8 @@ const router = createBrowserRouter(
         </Route>
       </Route>
     </Route>
-    // <Route element={<SideBarJSX />}>
-    //   <Route path="*" element={<Teste />}></Route>
-    // </Route>
   )
 )
-
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Route element={<SideBarJSX />}>
-//       <Route>
-//         <Route element={<Protected />}>
-//           <Route
-//             path="/fagammon-esports/home"
-//             element={<ProtectedFirstAcess />}
-//           >
-//             <Route index element={<Home />} />
-//           </Route>
-//           <Route
-//             path="/fagammon-esports/cadastro"
-//             element={<Cadastro />}
-//             loader={async () => await isFistAcess()}
-//           />
-//         </Route>
-//         <Route element={<Public />}>
-//           <Route
-//             path="/fagammon-esports/not-found"
-//             element={<PaginaNaoEncontrada />}
-//           />
-//           <Route path="*" element={<PaginaNaoEncontrada />} />
-//           <Route
-//             index
-//             path="/fagammon-esports/"
-//             element={<Login />}
-//             loader={async () => await isAuthenticated()}
-//           />
-//         </Route>
-//       </Route>
-//     </Route>
-//   )
-// )
 
 const RoutesApp = () => {
   return (
