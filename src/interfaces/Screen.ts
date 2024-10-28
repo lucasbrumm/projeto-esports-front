@@ -1,4 +1,4 @@
-export interface Screen {
+export interface IScreen {
   id: number
   screenName: string
   text: string

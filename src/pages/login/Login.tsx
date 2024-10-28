@@ -33,8 +33,10 @@ function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [lembrarSenha, setLembrarSenha] = useState<boolean>(false)
   // //login admin
-  const [loginField, setLoginField] = useState<string>('11111111111')
-  const [passwordField, setPasswordField] = useState<string>('admin')
+  // const [loginField, setLoginField] = useState<string>('11111111111')
+  // const [passwordField, setPasswordField] = useState<string>('admin')
+  const [loginField, setLoginField] = useState<string>('')
+  const [passwordField, setPasswordField] = useState<string>('')
   //login player
   // const [loginField, setLoginField] = useState('22222222222')
   // const [passwordField, setPasswordField] = useState('coach')
@@ -211,10 +213,13 @@ function Login() {
 
   // função para fazer login
   async function signIn() {
+    if (!loginField || !passwordField) return
     setLoadingLogin(true)
+
     try {
       const credentials = returnDataFields()
       const data = await loginAuth(credentials)
+
       if (data) {
         await loginByToken(data)
       }

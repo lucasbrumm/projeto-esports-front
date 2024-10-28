@@ -12,8 +12,10 @@ import { atentaLogoTestId } from '../../components/BackgroundDefault'
 import { iconTextFieldTestId } from '../../components/IconTextField'
 import { sendPrimeiroAcesso } from '../../services/api/email'
 import { validarCPF, validarEmail } from '../../utils/helper'
+import { account, loginAuth } from '../../services/api/auth'
+import { getScreenByRole } from '../../services/api/screen'
 
-const dadosUserTest: IDadosUsuario = {
+const dadosUserMock: IDadosUsuario = {
   id: 1,
   cpf: '12345678900',
   email: 'lucas@lucas.com',
@@ -23,10 +25,12 @@ const dadosUserTest: IDadosUsuario = {
   firstAccess: false,
 }
 
+const telasPermitidasMock = ['1', '2']
+
 jest.mock('axios')
 
 jest.mock('../../services/api/auth', () => ({
-  account: jest.fn().mockResolvedValue(dadosUserTest),
+  account: jest.fn().mockResolvedValue(dadosUserMock),
   loginAuth: jest.fn().mockResolvedValue('mockToken'),
 }))
 
@@ -45,6 +49,12 @@ jest.mock('../../services/api/screen', () => ({
 jest.mock('../../utils/helper', () => ({
   validarEmail: jest.fn(),
   validarCPF: jest.fn(),
+}))
+
+jest.mock('@mui/material', () => ({
+  ...jest.requireActual('@mui/material'),
+  Snackbar: jest.fn((props) => <div {...props} />),
+  Alert: jest.fn((props) => <div {...props} />),
 }))
 
 const renderComponent = () => {
@@ -253,6 +263,78 @@ describe('Login Screen - Modal Primeiro acesso', () => {
           'Já existe uma solicitação de primeiro acesso para esse email, por favor recupere a senha!'
         )
       ).toBeInTheDocument()
+    })
+  })
+})
+
+describe('Login Screen - Teste de login', () => {
+  test('Login - Teste de login - Inputs Vazios', async () => {
+    renderComponent()
+
+    const loginButton = screen.getByText('Acessar')
+    fireEvent.click(loginButton)
+
+    await waitFor(() => {
+      expect(loginAuth).not.toHaveBeenCalled()
+    })
+  })
+
+  test('Login - Teste de login - Inputs preenchidos corretamente - (Resolved)', async () => {
+    ;(getScreenByRole as jest.Mock).mockResolvedValue({
+      data: telasPermitidasMock,
+    })
+    ;(account as jest.Mock).mockResolvedValue(dadosUserMock)
+    ;(loginAuth as jest.Mock).mockResolvedValue('mockToken')
+
+    renderComponent()
+
+    const loginField = screen.getByLabelText('Login')
+    const passwordField = screen.getByLabelText('Senha')
+
+    fireEvent.change(loginField, { target: { value: 'admin' } })
+    fireEvent.change(passwordField, { target: { value: 'admin' } })
+
+    const loginButton = screen.getByText('Acessar')
+    fireEvent.click(loginButton)
+
+    await waitFor(() => {
+      expect(loginAuth).toHaveBeenCalled()
+    })
+
+    await waitFor(() => {
+      expect(account).toHaveBeenCalledWith('mockToken')
+    })
+
+    await waitFor(() => {
+      expect(getScreenByRole).toHaveBeenCalledWith(dadosUserMock.userRole)
+    })
+  })
+
+  test('Login - Teste de login - Inputs preenchidos corretamente - (Reject)', async () => {
+    ;(getScreenByRole as jest.Mock).mockRejectedValueOnce(
+      new Error('Request failed')
+    )
+    renderComponent()
+
+    const loginField = screen.getByLabelText('Login')
+    const passwordField = screen.getByLabelText('Senha')
+
+    fireEvent.change(loginField, { target: { value: 'admin' } })
+    fireEvent.change(passwordField, { target: { value: 'admin' } })
+
+    const loginButton = screen.getByText('Acessar')
+    fireEvent.click(loginButton)
+
+    await waitFor(() => {
+      expect(loginAuth).toHaveBeenCalled()
+    })
+
+    await waitFor(() => {
+      expect(account).not.toHaveBeenCalled()
+    })
+
+    await waitFor(() => {
+      expect(getScreenByRole).not.toHaveBeenCalled()
     })
   })
 })
