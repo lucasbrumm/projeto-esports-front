@@ -10,6 +10,8 @@ import Login, {
 
 import { atentaLogoTestId } from '../../components/BackgroundDefault'
 import { iconTextFieldTestId } from '../../components/IconTextField'
+import { sendPrimeiroAcesso } from '../../services/api/email'
+import { validarCPF, validarEmail } from '../../utils/helper'
 
 const dadosUserTest: IDadosUsuario = {
   id: 1,
@@ -148,7 +150,13 @@ describe('Login Screen - Modal Primeiro acesso', () => {
     expect(okButton).toBeInTheDocument()
   })
 
-  test('Login - Teste de inputs', async () => {
+  test('Login - Teste de inputs - Inputs inválidos', async () => {
+    ;(sendPrimeiroAcesso as jest.Mock).mockResolvedValue({
+      result: 'ok',
+    })
+    ;(validarEmail as jest.Mock).mockReturnValue(false)
+    ;(validarCPF as jest.Mock).mockReturnValue(false)
+
     renderComponentWithModalPrimeiroAcesso()
 
     const emailField = screen.getByLabelText('Email')
@@ -166,11 +174,85 @@ describe('Login Screen - Modal Primeiro acesso', () => {
     const okButton = screen.getByText('OK')
     fireEvent.click(okButton)
 
-    // await waitFor(() => {
-    //   expect(
-    //     screen.getByText(
-    //       'Bora lá! Uma requisição de primeiro acesso foi encaminhada para seu e-mail.'
-    //     )
-    //   ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(sendPrimeiroAcesso).not.toHaveBeenCalled()
+    })
+  })
+
+  test('Login - Teste de inputs - API - Inputs válidos (Resolved)', async () => {
+    ;(sendPrimeiroAcesso as jest.Mock).mockResolvedValue({
+      result: 'ok',
+    })
+    ;(validarEmail as jest.Mock).mockReturnValue(true)
+    ;(validarCPF as jest.Mock).mockReturnValue(true)
+
+    renderComponentWithModalPrimeiroAcesso()
+
+    const emailField = screen.getByLabelText('Email')
+    const cpfField = screen.getByLabelText('CPF')
+
+    const emailValue = 'teste@teste.com'
+    const cpfValue = '123.456.789-00'
+
+    fireEvent.change(emailField, { target: { value: emailValue } })
+    fireEvent.change(cpfField, { target: { value: cpfValue } })
+
+    expect(emailField).toHaveValue(emailValue)
+    expect(cpfField).toHaveValue(cpfValue)
+
+    const okButton = screen.getByText('OK')
+    fireEvent.click(okButton)
+
+    await waitFor(() => {
+      expect(sendPrimeiroAcesso).toHaveBeenCalledWith({
+        cpfReceiver: cpfValue.replace(/\D/g, ''),
+        emailReceiver: emailValue,
+      })
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Bora lá! Uma requisição de primeiro acesso foi encaminhada para seu e-mail.'
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  test('Login - Teste de inputs - API - Inputs inválidos (Rejected)', async () => {
+    ;(sendPrimeiroAcesso as jest.Mock).mockRejectedValueOnce(
+      new Error('Request failed')
+    )
+    ;(validarEmail as jest.Mock).mockReturnValue(true)
+    ;(validarCPF as jest.Mock).mockReturnValue(true)
+
+    renderComponentWithModalPrimeiroAcesso()
+
+    const emailField = screen.getByLabelText('Email')
+    const cpfField = screen.getByLabelText('CPF')
+
+    const emailValue = 'teste@teste.com'
+    const cpfValue = '123.456.789-00'
+
+    fireEvent.change(emailField, { target: { value: emailValue } })
+    fireEvent.change(cpfField, { target: { value: cpfValue } })
+
+    expect(emailField).toHaveValue(emailValue)
+    expect(cpfField).toHaveValue(cpfValue)
+
+    const okButton = screen.getByText('OK')
+    fireEvent.click(okButton)
+
+    await waitFor(() => {
+      expect(sendPrimeiroAcesso).toHaveBeenCalled()
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Já existe uma solicitação de primeiro acesso para esse email, por favor recupere a senha!'
+        )
+      ).toBeInTheDocument()
+    })
   })
 })
