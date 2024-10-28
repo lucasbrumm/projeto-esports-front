@@ -317,12 +317,11 @@ function Login() {
             setMsgTextModal(
               'Já existe uma solicitação de primeiro acesso para esse email, por favor recupere a senha!'
             )
+            console.log('Erro ao fazer solicitar o primeiro acesso', error)
           })
 
         setModalPrimeiroAcesso(false)
         setModalRequsicaoEnviada(true)
-      } catch (error) {
-        console.log('Erro ao fazer solicitar o primeiro acesso', error)
       } finally {
         setLoadingEmail(false)
         setModalPrimeiroAcesso(false)
