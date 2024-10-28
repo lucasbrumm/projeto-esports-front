@@ -7,7 +7,8 @@ import Login, {
   checkboxLembrarSenhaTestId,
   inputsLoginScreenDataTestId,
 } from '../../pages/login/Login'
-import { atentaLogoTestId } from '../../components/BackgroundUser'
+
+import { atentaLogoTestId } from '../../components/BackgroundDefault'
 import { iconTextFieldTestId } from '../../components/IconTextField'
 
 const dadosUserTest: IDadosUsuario = {
@@ -19,6 +20,8 @@ const dadosUserTest: IDadosUsuario = {
   enabled: true,
   firstAccess: false,
 }
+
+jest.mock('axios')
 
 jest.mock('../../services/api/auth', () => ({
   account: jest.fn().mockResolvedValue(dadosUserTest),
@@ -37,6 +40,11 @@ jest.mock('../../services/api/screen', () => ({
   getScreenByRole: jest.fn().mockResolvedValue({ data: [] }),
 }))
 
+jest.mock('../../utils/helper', () => ({
+  validarEmail: jest.fn(),
+  validarCPF: jest.fn(),
+}))
+
 const renderComponent = () => {
   render(
     <Provider store={store}>
@@ -45,6 +53,19 @@ const renderComponent = () => {
       </MemoryRouter>
     </Provider>
   )
+}
+
+const renderComponentWithModalPrimeiroAcesso = () => {
+  render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    </Provider>
+  )
+
+  const primeiroAcessoButton = screen.getByText('Primeiro Acesso')
+  fireEvent.click(primeiroAcessoButton)
 }
 
 beforeEach(() => {
@@ -68,7 +89,6 @@ describe('Login Screen - Renderizar componente corretamente', () => {
     // Labels
     expect(screen.getByLabelText('Login')).toBeInTheDocument()
     expect(screen.getByLabelText('Senha')).toBeInTheDocument()
-
     // 2 Inputs , login e senha
     Array.from({ length: 2 }).forEach((_, index) => {
       const input = screen.getByTestId(
@@ -82,13 +102,11 @@ describe('Login Screen - Renderizar componente corretamente', () => {
     renderComponent()
     const passwordField = screen.getByLabelText('Senha')
     const toggleButton = screen.getByTestId(iconTextFieldTestId)
-
     expect(passwordField).toHaveAttribute('type', 'password')
     fireEvent.click(toggleButton)
     expect(passwordField).toHaveAttribute('type', 'text')
     fireEvent.click(toggleButton)
     expect(passwordField).toHaveAttribute('type', 'password')
-
     fireEvent.mouseEnter(toggleButton)
     await waitFor(() => {
       expect(screen.getByText('mostrar/esconder senha')).toBeInTheDocument()
@@ -99,54 +117,60 @@ describe('Login Screen - Renderizar componente corretamente', () => {
     renderComponent()
     const checkbox = screen.getByTestId(checkboxLembrarSenhaTestId)
     expect(checkbox).toBeInTheDocument()
-
     //checkbox descheckado
     const checkboxIcon = screen.getByTestId('CheckBoxOutlineBlankRoundedIcon')
     expect(checkboxIcon).toBeInTheDocument()
-
     fireEvent.click(checkbox)
-
     //checkbox checkado
     const checkboxCheckedIcon = screen.getByTestId('CheckBoxIcon')
     expect(checkboxCheckedIcon).toBeInTheDocument()
   })
+})
 
-  // test('Login - Exibe snackbar de erro', async () => {
-  //   const loginButton = screen.getByText('Acessar')
-  //   fireEvent.click(loginButton)
+describe('Login Screen - Modal Primeiro acesso', () => {
+  test('Login - Primeiro Acesso modal', () => {
+    renderComponent()
+    const primeiroAcessoButton = screen.getByText('Primeiro Acesso')
+    fireEvent.click(primeiroAcessoButton)
 
-  //   await waitFor(() => {
-  //     expect(screen.getByRole('alert')).toBeInTheDocument()
-  //   })
-  // })
+    expect(
+      screen.getByText(
+        'Informe seu e-mail e CPF para solicitar o primeiro acesso.'
+      )
+    ).toBeInTheDocument()
 
-  // test('Login - Primeiro Acesso modal', () => {
-  //   const primeiroAcessoButton = screen.getByText('Primeiro Acesso')
-  //   fireEvent.click(primeiroAcessoButton)
+    const emailField = screen.getByLabelText('Email')
+    const cpfField = screen.getByLabelText('CPF')
+    const okButton = screen.getByText('OK')
 
-  //   expect(screen.getByText('Primeiro Acesso')).toBeInTheDocument()
-  //   expect(screen.getByLabelText('Email')).toBeInTheDocument()
-  //   expect(screen.getByLabelText('CPF')).toBeInTheDocument()
-  // })
+    expect(emailField).toBeInTheDocument()
+    expect(cpfField).toBeInTheDocument()
+    expect(okButton).toBeInTheDocument()
+  })
 
-  // test('Login - Solicitar Primeiro Acesso', async () => {
-  //   const primeiroAcessoButton = screen.getByText('Primeiro Acesso')
-  //   fireEvent.click(primeiroAcessoButton)
+  test('Login - Teste de inputs', async () => {
+    renderComponentWithModalPrimeiroAcesso()
 
-  //   const emailField = screen.getByLabelText('Email')
-  //   const cpfField = screen.getByLabelText('CPF')
-  //   const okButton = screen.getByText('OK')
+    const emailField = screen.getByLabelText('Email')
+    const cpfField = screen.getByLabelText('CPF')
 
-  //   fireEvent.change(emailField, { target: { value: 'test@test.com' } })
-  //   fireEvent.change(cpfField, { target: { value: '123.456.789-00' } })
-  //   fireEvent.click(okButton)
+    const emailValue = 'teste@teste.com'
+    const cpfValue = '123.456.789-00'
 
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.getByText(
-  //         'Bora lá! Uma requisição de primeiro acesso foi encaminhada para seu e-mail.'
-  //       )
-  //     ).toBeInTheDocument()
-  //   })
-  // })
+    fireEvent.change(emailField, { target: { value: emailValue } })
+    fireEvent.change(cpfField, { target: { value: cpfValue } })
+
+    expect(emailField).toHaveValue(emailValue)
+    expect(cpfField).toHaveValue(cpfValue)
+
+    const okButton = screen.getByText('OK')
+    fireEvent.click(okButton)
+
+    // await waitFor(() => {
+    //   expect(
+    //     screen.getByText(
+    //       'Bora lá! Uma requisição de primeiro acesso foi encaminhada para seu e-mail.'
+    //     )
+    //   ).toBeInTheDocument()
+  })
 })

@@ -299,6 +299,7 @@ function Login() {
   async function solicitarPrimeiroAcesso() {
     const trueEmail = validarEmail(emailPrimeiroAcesso)
     const trueCpf = validarCPF(cpf)
+
     if (trueEmail && trueCpf) {
       const newAcess: IEmailFirstAcess = {
         cpfReceiver: cpf?.replace(/\D/g, ''),
